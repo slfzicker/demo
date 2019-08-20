@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.dao.UsersDao">
+	<select id="findPageObjects" resultType="com.cy.entity.Roles">
+		select *
+		from roles
+		<include refid="queryWhereId" />
+		order by createdTime desc
+		limit #{startIndex},#{pageSize}
+	</select>
+	<select id="getRowCount" resultType="int">
+		select count(*)
+		from roles
+		<include refid="queryWhereId" />
+	</select>
+	<sql id="queryWhereId">
+		<where>
+			<if test="name!=null and name!=''">
+				name like concat("%",#{name},"%")
+			</if>
+		</where>
+	</sql>
+	<update id="updatePassword">
+         update users
+         set password=#{password},
+             salt=#{salt},
+             modifiedTime=now()
+         where id=#{id}
+</update>
+</mapper>
